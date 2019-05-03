@@ -6,15 +6,17 @@
 
 #include <Version.def>
 
+#include <BluetoothSerial.h>
 #include <Bluetooth/Bluetooth.h>
 #include <Countdown/Countdown.h>
 #include <Lamp/Lamp.h>
 
-#define REFRESH_TIME 3000
+#define REFRESH_TIME 1000
 
 class App {
     private:
         Countdown* mainTimeout;
+        BluetoothSerial* bluetoothSerial;
         Bluetooth* bluetooth;
         Lamp* lamp;
 
@@ -22,6 +24,7 @@ class App {
         App();
         void process();
         void init();
+        void showBluetoothHelp();
 };
 
 #endif

@@ -29,8 +29,8 @@ App::App() {
 
 	this->bluetooth->getInstance()->register_callback(callback);
 
-	this->lamp = new Lamp(GPIO_NUM_5);
-	
+	this->lamp = new Lamp(GPIO_NUM_5, this->bluetooth->getInstance());
+
 }
 
 
@@ -39,6 +39,23 @@ App::App() {
  */
 void App::init() {
 	this->bluetooth->setup();
+}
+
+
+void App::showBluetoothHelp() {
+	this->bluetooth->getInstance()->printf(
+		"\r\n-----------------------------------------\r\n"
+		"Welcome to UVRelayTimer\r\n\n"
+		"Start timer:\r\n"
+		"<time>sec/min/hour\r\n\n"
+		"Commands:\r\n"
+		"help   ... this menu\r\n"
+		"stop   ... stop and reset timer\r\n"
+		"pause  ... pause timer and remember time for resume\r\n"
+		"resume ... resume in countdown after pause\r\n"
+		"ON		... switch light on manually\r\n"
+		"OFF	... switch light off manually\r\n"
+		"-----------------------------------------\r\n\n");
 }
 
 
@@ -68,21 +85,25 @@ void App::process() {
 		unsigned int time = 0;
 		unsigned int num = (int) message.toInt();
 		
-		Serial.printf("Detected number: %d", num);
-		
-		if(message.indexOf("min") > -1) {
-			time = num * 1000 * 60;
-			Serial.printf("Detected minutes, calculated time: %d", time);
-		}
+		Serial.printf("Detected number: %d\r\n", num);
+		this->bluetooth->getInstance()->printf("Detected number: %d", num);
 
 		if(message.indexOf("sec") > -1) {
 			time = num * 1000;
-			Serial.printf("Detected seconds, calculated time: %d", time);
+			Serial.printf(" in seconds, calculated time: %d\r\n", time);
+			this->bluetooth->getInstance()->printf(" in seconds, calculated time: %d\r\n", time);
 		}
 
-		if(message.indexOf("hod") > -1) {
+		if(message.indexOf("min") > -1) {
+			time = num * 1000 * 60;
+			Serial.printf(" in minutes, calculated time: %d\r\n", time);
+			this->bluetooth->getInstance()->printf("in minutes, calculated time: %d\r\n", time);
+		}
+
+		if(message.indexOf("hour") > -1) {
 			time = num * 1000 * 60 * 60;
-			Serial.printf("Detected hours, calculated time: %d", time);
+			Serial.printf(" in hours, calculated time: %d\r\n", time);
+			this->bluetooth->getInstance()->printf(" in hours, calculated time: %d\r\n", time);
 		}
 
 		if(message == "ON") {
@@ -95,6 +116,18 @@ void App::process() {
 
 		if(message == "stop") {
 			this->lamp->stop();
+		}
+
+		if(message == "pause") {
+			this->lamp->pause();
+		}
+
+		if(message == "resume") {
+			this->lamp->resume();
+		}
+
+		if(message == "help") {
+			this->showBluetoothHelp();
 		}
 
 		if(time) {
@@ -113,7 +146,7 @@ void App::process() {
 
 			Serial.printf("Running...time left: %lu sec\r\n", time / 1000);
 
-			this->bluetooth->getInstance()->printf("Running...time left: %lu sec\r\n", time / 1000);
+			this->bluetooth->getInstance()->printf("Running, time left: %lu sec\r\n", time / 1000);
 
 			this->mainTimeout->set(REFRESH_TIME);
 
@@ -122,7 +155,7 @@ void App::process() {
 	}
 
 	if(clientConnected) {
-		this->bluetooth->getInstance()->printf("\r\n----------------\r\nWelcome to UVRelayTimer\r\nCommands:\r\nstart,stop,pause,resume,10..30sec,1..30min\r\n----------------\r\n");
+		this->showBluetoothHelp();
 		clientConnected = false;
 	}
 }
