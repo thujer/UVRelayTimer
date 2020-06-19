@@ -3,7 +3,7 @@
 #define _LAMP_H_
 
 #include <Arduino.h>
-#include <Countdown/Countdown.h>
+#include "Countdown/Countdown.h"
 #include <BluetoothSerial.h>
 
 const char PIN_RELAY = GPIO_NUM_5;

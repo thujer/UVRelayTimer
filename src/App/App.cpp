@@ -86,7 +86,7 @@ void App::process() {
 		unsigned int num = (int) message.toInt();
 		
 		Serial.printf("Detected number: %d\r\n", num);
-		this->bluetooth->getInstance()->printf("Detected number: %d", num);
+		this->bluetooth->getInstance()->printf("Detected number: %d\r\n", num);
 
 		if(message.indexOf("sec") > -1) {
 			time = num * 1000;

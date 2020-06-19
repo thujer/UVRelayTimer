@@ -8,7 +8,7 @@
 
 #include <BluetoothSerial.h>
 #include <Bluetooth/Bluetooth.h>
-#include <Countdown/Countdown.h>
+#include "Countdown/Countdown.h"
 #include <Lamp/Lamp.h>
 
 #define REFRESH_TIME 1000

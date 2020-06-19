@@ -11,7 +11,7 @@
 
 #include <Arduino.h>
 
-#include <Countdown/Countdown.h>
+#include "Countdown/Countdown.h"
 
 void Countdown::set(unsigned long ms) {
 	this->countdownDelay = ms;

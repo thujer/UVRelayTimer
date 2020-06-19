@@ -2,7 +2,7 @@
 #define touch_button_controller_h
 
 #include <Arduino.h>
-#include <TouchButton/TouchButton.h>
+#include "TouchButton/TouchButton.h"
 
 class TouchButtonController {
     private:

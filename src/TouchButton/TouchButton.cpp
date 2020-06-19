@@ -8,7 +8,7 @@
 
 #include <Arduino.h>
 
-#include <TouchButton/TouchButton.h>
+#include "TouchButton/TouchButton.h"
 
 //#define TOUCH_PIN T0 //connected to 4
 
